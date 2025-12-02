@@ -260,6 +260,11 @@ section:hover {
   font-weight: 500;
 }
 
+/* Hide the default file input */
+#fileInput {
+  display: none;
+}
+
 /* ====================================
    Buttons - Glassmorphism with Gradients
    ==================================== */
