@@ -3,57 +3,95 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Compresor Huffman - Comprime y descomprime archivos usando el algoritmo de Huffman" />
-  <title>Compresor Huffman — Demo Interactiva</title>
+  <meta name="description" content="Compresor Huffman - Algoritmo de compresión óptimo con visualización interactiva" />
+  <meta name="theme-color" content="#0a0e27" />
+  <title>🗜️ Compresor Huffman — Visualización Interactiva</title>
   <link rel="stylesheet" href="/static/styles.css" />
+  
+  <!-- Preload critical fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 </head>
 <body>
+  <!-- Header con glassmorphism -->
   <header>
-    <h1>🗜️ Compresor Huffman</h1>
+    <h1>🗜️ Compresor de Huffman</h1>
   </header>
   
   <main>
+    <!-- Sección Izquierda: Controles -->
     <section id="left">
+      <!-- Dropzone mejorado -->
       <div id="dropzone">
         <div id="dropzone-icon">📁</div>
-        <div id="dropzone-text">Arrastra un archivo o haz clic para seleccionar</div>
+        <div id="dropzone-text">
+          Arrastra un archivo aquí<br>
+          <span style="font-size: 0.9rem; opacity: 0.7;">o haz clic para seleccionar</span>
+        </div>
       </div>
       
       <input type="file" id="fileInput" />
       
+      <!-- Progress bar con animación -->
       <div class="progress-container" id="progressContainer">
-        <div class="progress-label" id="progressLabel">Procesando...</div>
+        <div class="progress-label" id="progressLabel">⚡ Procesando...</div>
         <div class="progress-bar">
           <div class="progress-fill" id="progressFill" style="width: 0%"></div>
         </div>
       </div>
       
+      <!-- Botones con gradientes -->
       <div class="buttons">
-        <button id="analyzeBtn">📊 Analizar</button>
-        <button id="compressBtn">⚡ Comprimir</button>
-        <button id="decompressBtn">🔓 Descomprimir</button>
-        <button id="demoBtn">🎮 Demo</button>
+        <button id="analyzeBtn">
+          <span>📊 Analizar</span>
+        </button>
+        <button id="compressBtn">
+          <span>⚡ Comprimir</span>
+        </button>
+        <button id="decompressBtn">
+          <span>🔓 Descomprimir</span>
+        </button>
+        <button id="demoBtn">
+          <span>🎮 Demo</span>
+        </button>
       </div>
       
-      <pre id="stats">Sin archivo seleccionado</pre>
+      <!-- Stats panel con efecto terminal -->
+      <pre id="stats">📂 Sin archivo seleccionado
+
+💡 Tip: Arrastra un archivo o usa el botón Demo
+   para ver el compresor en acción</pre>
+      
+      <!-- Sección de comparación -->
+      <div id="compare"></div>
     </section>
     
+    <!-- Sección Derecha: Visualizaciones -->
     <section id="right">
-      <h2 class="viz-title">🌳 Árbol de Huffman</h2>
-      <canvas id="treeCanvas" class="viz-canvas"></canvas>
+      <!-- Árbol de Huffman -->
+      <div class="viz-section">
+        <h2 class="viz-title">🌳 Árbol de Huffman</h2>
+        <canvas id="treeCanvas" class="viz-canvas"></canvas>
+      </div>
       
-      <h2 class="viz-title">📊 Distribución de Frecuencias</h2>
-      <canvas id="freqCanvas" class="viz-canvas"></canvas>
+      <!-- Distribución de Frecuencias -->
+      <div class="viz-section">
+        <h2 class="viz-title">📊 Distribución de Frecuencias</h2>
+        <canvas id="freqCanvas" class="viz-canvas"></canvas>
+      </div>
       
-      <h2 class="viz-title">🔢 Tabla de Códigos Huffman</h2>
-      <div id="huffmanCodesTable"></div>
-      
-      <div id="compare"></div>
+      <!-- Tabla de Códigos Huffman -->
+      <div class="viz-section">
+        <h2 class="viz-title">🔢 Códigos Huffman</h2>
+        <div id="huffmanCodesTable"></div>
+      </div>
     </section>
   </main>
   
+  <!-- Contenedor de notificaciones -->
   <div id="notifications"></div>
   
+  <!-- Scripts -->
   <script src="/static/app.js"></script>
 </body>
 </html>

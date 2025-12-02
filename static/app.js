@@ -170,7 +170,17 @@ analyzeBtn.addEventListener('click', async () => {
     }
     
     const compressionRatio = ((1 - (j.entropy / 8)) * 100).toFixed(2);
-    
+    let efficiencyText = '';
+    if (j.efficiency >= 98) {
+      efficiencyText = '⭐⭐⭐⭐⭐ Excelente';
+    } else if (j.efficiency >= 95) {
+      efficiencyText = '⭐⭐⭐⭐ Muy buena';
+    } else if (j.efficiency >= 90) {
+      efficiencyText = '⭐⭐⭐ Buena';
+    } else {
+      efficiencyText = '⭐⭐ Aceptable';
+    }
+
     statsPre.innerText = `📊 ANÁLISIS COMPLETADO
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📄 Archivo: ${file.name}
