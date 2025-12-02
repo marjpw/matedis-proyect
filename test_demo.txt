@@ -1,0 +1,1 @@
+ABRACADABRA! Esta es una prueba del compresor Huffman. El texto contiene caracteres repetidos como AAAA, BBBB, CCCC para demostrar la compresion efectiva. También incluye símbolos especiales: !@#$%^&*() y números 1234567890. ¡Magia de la compresión! 🎩✨
