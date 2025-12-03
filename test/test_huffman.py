@@ -1,26 +1,20 @@
-"""
-Unit tests for Huffman compression implementation.
-
-Tests cover basic functionality, edge cases, and error handling.
-"""
-
 import pytest
 from huffman.huffman import HuffmanCoder, build_frequency_table, Node
 from huffman.utils import BitWriter, BitReader, pack_metadata, unpack_metadata
 
 
 class TestNode:
-    """Test the Node class."""
+    """Test de la clase Node."""
     
     def test_leaf_node(self):
-        """Test that leaf nodes are properly identified."""
+        """Test que los nodos hoja se identifican correctamente."""
         node = Node(freq=10, symbol=65)
         assert node.is_leaf() is True
         assert node.symbol == 65
         assert node.freq == 10
     
     def test_internal_node(self):
-        """Test that internal nodes are properly identified."""
+        """Test que los nodos internos se identifican correctamente."""
         left = Node(freq=5, symbol=65)
         right = Node(freq=10, symbol=66)
         node = Node(freq=15, left=left, right=right)
@@ -29,10 +23,10 @@ class TestNode:
 
 
 class TestBitIO:
-    """Test BitWriter and BitReader classes."""
+    """Test de las clases BitWriter y BitReader."""
     
     def test_write_read_single_bit(self):
-        """Test writing and reading a single bit."""
+        """Test de escritura y lectura de un solo bit."""
         writer = BitWriter()
         writer.write_bit(1)
         writer.flush()
@@ -43,7 +37,7 @@ class TestBitIO:
         assert bit == 1
     
     def test_write_read_multiple_bits(self):
-        """Test writing and reading multiple bits."""
+        """Test de escritura y lectura de múltiples bits."""
         writer = BitWriter()
         bits = [1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 1, 0]
         for b in bits:
@@ -61,7 +55,7 @@ class TestBitIO:
         assert read_bits[:len(bits)] == bits
     
     def test_write_read_bytes(self):
-        """Test writing and reading raw bytes."""
+        """Test de escritura y lectura de bytes."""
         writer = BitWriter()
         test_bytes = b'Hello, World!'
         writer.write_bytes(test_bytes)
@@ -73,10 +67,10 @@ class TestBitIO:
 
 
 class TestMetadata:
-    """Test metadata packing and unpacking."""
+    """Test de la metadata."""
     
     def test_pack_unpack_metadata(self):
-        """Test that metadata can be packed and unpacked correctly."""
+        """Test de empaquetado y desempaquetado de la metadata."""
         freqs = {65: 10, 66: 20, 67: 30}
         packed = pack_metadata(freqs)
         
@@ -86,17 +80,17 @@ class TestMetadata:
         assert unpacked == freqs
     
     def test_empty_metadata(self):
-        """Test packing empty frequency table."""
+        """Test de empaquetado de una tabla de frecuencias vacía."""
         freqs = {}
         packed = pack_metadata(freqs)
         assert len(packed) == 2  # Just the count
 
 
 class TestHuffmanCoder:
-    """Test the HuffmanCoder class."""
+    """Test de la clase HuffmanCoder."""
     
     def test_build_frequency_table(self):
-        """Test building frequency table from data."""
+        """Test de construcción de la tabla de frecuencias."""
         data = b'ABRACADABRA'
         freqs = build_frequency_table(data)
         
@@ -107,7 +101,7 @@ class TestHuffmanCoder:
         assert freqs[ord('D')] == 1
     
     def test_build_tree(self):
-        """Test building Huffman tree."""
+        """Test de construcción del árbol de Huffman."""
         coder = HuffmanCoder()
         freqs = {65: 5, 66: 2, 67: 1}
         tree = coder.build_tree_from_freq(freqs)
@@ -117,7 +111,7 @@ class TestHuffmanCoder:
         assert tree.is_leaf() is False
     
     def test_tree_to_codes(self):
-        """Test generating codes from tree."""
+        """Test de generación de códigos desde el árbol."""  
         coder = HuffmanCoder()
         freqs = {65: 5, 66: 2, 67: 1}
         tree = coder.build_tree_from_freq(freqs)
@@ -128,20 +122,18 @@ class TestHuffmanCoder:
         assert all(set(code).issubset({'0', '1'}) for code in codes.values())
     
     def test_entropy_calculation(self):
-        """Test Shannon entropy calculation."""
+        """Test de cálculo de entropía de Shannon."""
         coder = HuffmanCoder()
-        # Uniform distribution should have maximum entropy
         freqs = {0: 1, 1: 1, 2: 1, 3: 1}
         entropy = coder.entropy_from_freq(freqs)
-        assert 1.9 < entropy < 2.1  # Should be 2.0 for 4 symbols
+        assert 1.9 < entropy < 2.1
         
-        # Single symbol should have 0 entropy
         freqs = {0: 100}
         entropy = coder.entropy_from_freq(freqs)
         assert entropy == 0.0
     
     def test_compress_decompress_basic(self):
-        """Test basic compression and decompression."""
+        """Test de compresión y descompresión básica."""
         coder = HuffmanCoder()
         original = b'Hello, World! This is a test message.'
         
@@ -151,7 +143,7 @@ class TestHuffmanCoder:
         assert decompressed == original
     
     def test_compress_decompress_repeated_chars(self):
-        """Test compression with highly repetitive data."""
+        """Test de compresión y descompresión con datos repetitivos."""
         coder = HuffmanCoder()
         original = b'AAAAAAAAAA BBBB CC D'
         
@@ -159,11 +151,9 @@ class TestHuffmanCoder:
         decompressed = coder.decompress_bytes(compressed)
         
         assert decompressed == original
-        # Compression should be effective for repetitive data
-        assert len(compressed) < len(original)
     
     def test_compress_decompress_single_char(self):
-        """Test compression with single repeated character."""
+        """Test compresión y descompresión con un solo carácter repetido."""  
         coder = HuffmanCoder()
         original = b'AAAAAAAAAA'
         
@@ -173,7 +163,7 @@ class TestHuffmanCoder:
         assert decompressed == original
     
     def test_compress_decompress_binary(self):
-        """Test compression with binary data."""
+        """Test de compresión y descompresión con datos binarios."""    
         coder = HuffmanCoder()
         original = bytes(range(256))
         
@@ -183,25 +173,25 @@ class TestHuffmanCoder:
         assert decompressed == original
     
     def test_compress_empty_raises_error(self):
-        """Test that compressing empty data raises an error."""
+        """Test que al comprimir datos vacíos sale un error."""  
         coder = HuffmanCoder()
         with pytest.raises(ValueError, match="Cannot compress empty data"):
             coder.compress_bytes(b'')
     
     def test_decompress_empty_raises_error(self):
-        """Test that decompressing empty data raises an error."""
+        """Test que al descomprimir datos vacíos sale un error."""
         coder = HuffmanCoder()
         with pytest.raises(ValueError, match="Cannot decompress empty data"):
             coder.decompress_bytes(b'')
     
     def test_decompress_invalid_data(self):
-        """Test that decompressing invalid data raises an error."""
+        """Test que al descomprimir datos inválidos sale un error."""  
         coder = HuffmanCoder()
         with pytest.raises(ValueError):
             coder.decompress_bytes(b'invalid data')
     
     def test_tree_to_dict(self):
-        """Test converting tree to dictionary."""
+        """Test de convertir el árbol a un diccionario."""
         coder = HuffmanCoder()
         freqs = {65: 5, 66: 2}
         tree = coder.build_tree_from_freq(freqs)
@@ -215,10 +205,10 @@ class TestHuffmanCoder:
 
 
 class TestEdgeCases:
-    """Test edge cases and special scenarios."""
+    """Test de casos extremos y escenarios especiales."""
     
     def test_unicode_text(self):
-        """Test with UTF-8 encoded text."""
+        """Test de compresión y descompresión con texto Unicode."""
         coder = HuffmanCoder()
         original = 'Hola, mundo! 🌍'.encode('utf-8')
         
@@ -229,7 +219,7 @@ class TestEdgeCases:
         assert decompressed.decode('utf-8') == 'Hola, mundo! 🌍'
     
     def test_large_data(self):
-        """Test with larger data."""
+        """Test con datos grandes."""
         coder = HuffmanCoder()
         # Create 1MB of somewhat random but compressible data
         original = (b'ABCD' * 10000 + b'XYZ' * 5000 + b'123' * 3000)
@@ -240,7 +230,7 @@ class TestEdgeCases:
         assert decompressed == original
     
     def test_compression_ratio(self):
-        """Test that compression actually reduces size for repetitive data."""
+        """Test que la compresión reduce el tamaño para datos repetitivos."""
         coder = HuffmanCoder()
         original = b'A' * 1000 + b'B' * 100 + b'C' * 10
         

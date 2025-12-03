@@ -208,7 +208,7 @@ matedisProyect/
 En `app.py`:
 
 ```python
-MAX_FILE_SIZE = 100 * 1024 * 1024  # 100 MB por defecto
+MAX_FILE_SIZE = 750 * 1024 * 1024  # 750 MB por defecto
 ```
 
 ### Puerto del Servidor
@@ -253,7 +253,5 @@ Desarrollado como proyecto educativo para demostrar el algoritmo de compresión 
 - La comunidad de Python y Flask
 
 ---
-
-**¿Preguntas o problemas?** Abre un issue en el repositorio.
 
 **¡Disfruta comprimiendo! 🎉**
