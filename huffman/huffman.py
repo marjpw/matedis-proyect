@@ -1,10 +1,3 @@
-"""
-Huffman Coding Implementation
-
-This module provides a complete implementation of Huffman coding for data compression.
-It includes tree construction, encoding, decoding, and entropy calculation.
-"""
-
 import heapq
 from collections import Counter
 from math import log2

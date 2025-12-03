@@ -60,7 +60,7 @@ function showProgress(label = 'Procesando...') {
   progressLabel.textContent = label;
   progressFill.style.width = '0%';
   
-  // Simulate progress
+  // Simular progreso
   let progress = 0;
   const interval = setInterval(() => {
     progress += Math.random() * 15;
@@ -91,7 +91,7 @@ function formatBytes(bytes) {
   return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
 }
 
-function validateFile(f, maxSize = 750 * 1024 * 1024) { // 750MB default
+function validateFile(f, maxSize = 750 * 1024 * 1024) {
   if (!f) {
     showNotification('Por favor selecciona un archivo', 'error');
     return false;
@@ -111,7 +111,7 @@ function validateFile(f, maxSize = 750 * 1024 * 1024) { // 750MB default
 }
 
 // ====================================
-// File Handling
+// Manejo de archivos
 // ====================================
 
 fileInput.addEventListener('change', e => {
@@ -145,7 +145,7 @@ dropzone.addEventListener('drop', e => {
 });
 
 // ====================================
-// API Handlers
+// API
 // ====================================
 
 analyzeBtn.addEventListener('click', async () => {
@@ -235,7 +235,6 @@ compressBtn.addEventListener('click', async () => {
     
     const blob = await r.blob();
     
-    // Get stats from header
     const header = r.headers.get('X-Comp-Stats');
     if (header) {
       try {
@@ -264,7 +263,7 @@ compressBtn.addEventListener('click', async () => {
       }
     }
     
-    // Download file
+    // Descargar archivo
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -309,7 +308,7 @@ decompressBtn.addEventListener('click', async () => {
     
     const blob = await r.blob();
     
-    // Download file
+    // Descargar archivo
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -342,7 +341,7 @@ demoBtn.addEventListener('click', async () => {
 });
 
 // ====================================
-// Tree Visualization
+// Observar arbol
 // ====================================
 
 function drawTree(tree) {
@@ -375,7 +374,6 @@ function drawTree(tree) {
     const x = (xMin + xMax) / 2;
     const y = 30 + depth * verticalSpacing;
     
-    // Draw connection line to parent
     if (parentX !== null && parentY !== null) {
       ctx.strokeStyle = '#374151';
       ctx.lineWidth = 2;
@@ -385,7 +383,6 @@ function drawTree(tree) {
       ctx.stroke();
     }
     
-    // Draw node circle
     const isLeaf = node.symbol !== null;
     const gradient = ctx.createRadialGradient(x, y, 0, x, y, 22);
     
@@ -402,12 +399,10 @@ function drawTree(tree) {
     ctx.arc(x, y, 20, 0, Math.PI * 2);
     ctx.fill();
     
-    // Draw node border
     ctx.strokeStyle = isLeaf ? '#a78bfa' : '#60a5fa';
     ctx.lineWidth = 2;
     ctx.stroke();
     
-    // Draw label
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 12px Inter, monospace';
     ctx.textAlign = 'center';
@@ -415,7 +410,6 @@ function drawTree(tree) {
     
     let label = '';
     if (node.symbol !== null) {
-      // Show character if printable, otherwise hex
       const char = node.symbol >= 32 && node.symbol <= 126 
         ? String.fromCharCode(node.symbol) 
         : `0x${node.symbol.toString(16).toUpperCase()}`;
@@ -426,14 +420,12 @@ function drawTree(tree) {
     
     ctx.fillText(label, x, y);
     
-    // Draw frequency below node
     if (node.symbol !== null) {
       ctx.font = '10px Inter';
       ctx.fillStyle = '#9ca3af';
       ctx.fillText(`(${node.freq})`, x, y + 32);
     }
     
-    // Traverse children
     if (node.left) {
       traverse(node.left, depth + 1, xMin, x, x, y);
     }
@@ -461,13 +453,11 @@ function drawFrequencyChart(frequencies) {
     return;
   }
 
-  // Set canvas size
   freqCanvas.width = freqCanvas.offsetWidth;
   freqCanvas.height = freqCanvas.offsetHeight;
   
   freqCtx.clearRect(0, 0, freqCanvas.width, freqCanvas.height);
   
-  // Sort by frequency (descending) and take top 50
   const sortedFreqs = Object.entries(frequencies)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 50);
@@ -480,13 +470,13 @@ function drawFrequencyChart(frequencies) {
   const chartHeight = freqCanvas.height - padding.top - padding.bottom;
   const barWidth = chartWidth / sortedFreqs.length;
   
-  // Draw title
+  // Dibujar titulo
   freqCtx.fillStyle = '#e5e7eb';
   freqCtx.font = 'bold 18px Inter';
   freqCtx.textAlign = 'center';
   freqCtx.fillText('Distribución de Frecuencias (Top 50)', freqCanvas.width / 2, 25);
   
-  // Draw axes
+  // Dibujar ejes
   freqCtx.strokeStyle = '#374151';
   freqCtx.lineWidth = 2;
   freqCtx.beginPath();
@@ -495,28 +485,28 @@ function drawFrequencyChart(frequencies) {
   freqCtx.lineTo(freqCanvas.width - padding.right, freqCanvas.height - padding.bottom);
   freqCtx.stroke();
   
-  // Draw bars
+  // Dibujar barras
   sortedFreqs.forEach(([byte, freq], index) => {
     const barHeight = (freq / maxFreq) * chartHeight;
     const x = padding.left + index * barWidth;
     const y = freqCanvas.height - padding.bottom - barHeight;
     
-    // Create gradient for bar
+    // Crear gradiente para la barra
     const gradient = freqCtx.createLinearGradient(x, y, x, freqCanvas.height - padding.bottom);
-    const hue = (index / sortedFreqs.length) * 280 + 200; // Rainbow effect
+    const hue = (index / sortedFreqs.length) * 280 + 200; // Efecto arcoíris
     gradient.addColorStop(0, `hsl(${hue}, 70%, 60%)`);
     gradient.addColorStop(1, `hsl(${hue}, 70%, 40%)`);
     
-    // Draw bar
+    // Dibujar barra
     freqCtx.fillStyle = gradient;
     freqCtx.fillRect(x + 2, y, barWidth - 4, barHeight);
     
-    // Draw bar border
+    // Dibujar borde de la barra
     freqCtx.strokeStyle = `hsl(${hue}, 70%, 70%)`;
     freqCtx.lineWidth = 1;
     freqCtx.strokeRect(x + 2, y, barWidth - 4, barHeight);
     
-    // Draw label (character or hex)
+    // Etiqueta (caracter o hex)
     const char = parseInt(byte) >= 32 && parseInt(byte) <= 126 
       ? String.fromCharCode(parseInt(byte))
       : `${parseInt(byte).toString(16)}`;
@@ -530,7 +520,7 @@ function drawFrequencyChart(frequencies) {
     freqCtx.fillText(char, 0, 0);
     freqCtx.restore();
     
-    // Draw frequency value on hover (always show for top 10)
+    // Mostrar valor de frecuencia al pasar el mouse (siempre mostrar para los primeros 10)
     if (index < 10) {
       freqCtx.fillStyle = '#e5e7eb';
       freqCtx.font = 'bold 11px Inter';
@@ -539,7 +529,7 @@ function drawFrequencyChart(frequencies) {
     }
   });
   
-  // Draw Y-axis labels
+  // Etiquetas del eje Y
   freqCtx.fillStyle = '#9ca3af';
   freqCtx.font = '12px Inter';
   freqCtx.textAlign = 'right';
@@ -548,7 +538,7 @@ function drawFrequencyChart(frequencies) {
     const y = freqCanvas.height - padding.bottom - (chartHeight / 5) * i;
     freqCtx.fillText(value, padding.left - 10, y + 4);
     
-    // Draw grid line
+    // Linea de la cuadricula
     freqCtx.strokeStyle = '#374151';
     freqCtx.lineWidth = 1;
     freqCtx.setLineDash([2, 4]);
@@ -559,7 +549,7 @@ function drawFrequencyChart(frequencies) {
     freqCtx.setLineDash([]);
   }
   
-  // Y-axis label
+  // Etiqueta del eje Y
   freqCtx.save();
   freqCtx.translate(20, freqCanvas.height / 2);
   freqCtx.rotate(-Math.PI / 2);
@@ -569,7 +559,7 @@ function drawFrequencyChart(frequencies) {
   freqCtx.fillText('Frecuencia', 0, 0);
   freqCtx.restore();
   
-  // X-axis label
+  // Etiqueta del eje X
   freqCtx.fillStyle = '#9ca3af';
   freqCtx.font = '14px Inter';
   freqCtx.textAlign = 'center';
@@ -578,7 +568,7 @@ function drawFrequencyChart(frequencies) {
 
 
 // ====================================
-// Huffman Codes Table
+// Tabla de Códigos de Huffman
 // ====================================
 
 function renderHuffmanCodesTable(codes, frequencies) {
@@ -598,7 +588,7 @@ function renderHuffmanCodesTable(codes, frequencies) {
       return;
     }
     
-    // Build data array
+    // Construir array de datos
     const items = [];
     for (let key in codes) {
       const byteVal = parseInt(key);
@@ -613,11 +603,11 @@ function renderHuffmanCodesTable(codes, frequencies) {
     
     console.log(`Total items: ${items.length}`);
     
-    // Sort
+    // Ordenar
     items.sort((a,b) => b.freq - a.freq);
     const top = items.slice(0, 50);
     
-    // Build HTML
+    // Construir HTML
     let html = '<table><thead><tr><th>Char</th><th>Freq</th><th>Code</th><th>Len</th></tr></thead><tbody>';
     
     for (let i = 0; i < top.length; i++) {
@@ -642,12 +632,12 @@ function renderHuffmanCodesTable(codes, frequencies) {
 
 
 // ====================================
-// Initialize
+// Inicialización
 // ====================================
 
-// Verify huffmanCodesTableDiv is found
-console.log('Initializing app.js');
-console.log('huffmanCodesTableDiv element:', huffmanCodesTableDiv);
+// Verificar si huffmanCodesTableDiv se encuentra
+console.log('Inicializando app.js');
+console.log('Elemento huffmanCodesTableDiv:', huffmanCodesTableDiv);
 
 if (!huffmanCodesTableDiv) {
   console.error('ERROR: huffmanCodesTable div not found in DOM!');
@@ -655,7 +645,7 @@ if (!huffmanCodesTableDiv) {
   console.log('SUCCESS: huffmanCodesTable div found');
 }
 
-// Add CSS animation for slideOut
+// Agregar animación CSS para slideOut
 const style = document.createElement('style');
 style.textContent = `
   @keyframes slideOut {
@@ -671,11 +661,11 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// Initial canvas setup
+// Configuración inicial del lienzo
 drawTree(null);
 drawFrequencyChart(null);
 
-// Resize canvas on window resize
+// Redimensionar el lienzo al cambiar el tamaño de la ventana
 window.addEventListener('resize', () => {
   if (currentTree) {
     drawTree(currentTree);
